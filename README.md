@@ -9,7 +9,7 @@ cp env_files/.env.example env_files/.env
 ## Run local
 
 ```
-make start
+make up
 ```
 
 ## Attaching log
