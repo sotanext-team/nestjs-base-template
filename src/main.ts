@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {
@@ -8,6 +6,13 @@ import {
 } from 'nest-winston';
 import * as winston from 'winston';
 import 'reflect-metadata';
+import {
+  isDevEnv,
+  isLocalEnv,
+  isProdEnv,
+  isSandboxEnv,
+  isStagingEnv,
+} from './configs/env.config';
 
 const errorStackTracerFormat = winston.format((info) => {
   if (info instanceof Error) {
@@ -20,6 +25,15 @@ const errorStackTracerFormat = winston.format((info) => {
 });
 
 async function bootstrap() {
+  const hideColor = isProdEnv() || isSandboxEnv();
+  const uncolorizeOpts = {
+    level: hideColor,
+    message: hideColor,
+    raw: hideColor,
+  };
+
+  const logLevelDebug = isLocalEnv() || isDevEnv() || isStagingEnv();
+  // Step Logger
   const app = await NestFactory.create(AppModule, {
     logger: WinstonModule.createLogger({
       format: winston.format.combine(
@@ -38,15 +52,17 @@ async function bootstrap() {
           level: 'debug',
         }),
         new winston.transports.Console({
+          level: logLevelDebug ? 'debug' : 'info',
           format: winston.format.combine(
             winston.format.timestamp(),
             nestWinstonModuleUtilities.format.nestLike(),
+            winston.format.uncolorize(uncolorizeOpts),
           ),
         }),
       ],
     }),
   });
-  await app.startAllMicroservices();
+  // await app.startAllMicroservices();
 
   await app.listen(+process.env.PORT, function () {
     console.log(`start localhost:${process.env.PORT}`);

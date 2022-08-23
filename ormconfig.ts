@@ -1,11 +1,8 @@
 /**
  * this file will configure the setting of orm migration
  */
-let pathSrc = '.'; //run nest start
-if (!process.env.DB_CONNECTION) {
-  require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
-  pathSrc = 'src';
-}
+
+const pathSrc = 'src';
 module.exports = {
   type: process.env.DB_CONNECTION || 'mongodb',
   host: process.env.DB_HOST || 'localhost',

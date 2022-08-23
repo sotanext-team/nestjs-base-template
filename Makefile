@@ -4,14 +4,17 @@ build-local:
 build-production:
 	docker build -t nestjs-base-template:production -f production.Dockerfile .
 
-start:
+up:
 	docker-compose up -d
 
 stop:
 	docker-compose stop
 
+start:
+	docker-compose start
+
 down:
 	docker-compose down
 
 logs:
-	docker-compose logs -f nestjs-base-template
+	docker logs -f nestjs-base-template
