@@ -13,7 +13,7 @@ services:
       - /app/node_modules
     command: sh -c "npm i && npm run start:dev"
     env_file:
-      - ./env_files/.env
+      - ./env/.env
 
   mongo:
     container_name: mongo
@@ -26,8 +26,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_INITDB_DATABASE: fizenpay
-      DB_NAME: fizenpay
+      MONGO_INITDB_DATABASE: nestjs-base-template
+      DB_NAME: nestjs-base-template
       DB_USER: root
       DB_PASSWORD: root
 
